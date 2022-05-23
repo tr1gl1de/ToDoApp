@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Services", "ToDoApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Persistence", "ToDoApp.Persistence\ToDoApp.Persistence.csproj", "{44C91737-BAB4-4FD0-9C5E-B7262119C7D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{5FC7441C-DEE0-41B7-B15B-156E70EC5FF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Presentation", "ToDoApp.Presentation\ToDoApp.Presentation.csproj", "{5FC7441C-DEE0-41B7-B15B-156E70EC5FF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
