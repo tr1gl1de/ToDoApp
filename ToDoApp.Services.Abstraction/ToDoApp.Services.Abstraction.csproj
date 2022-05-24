@@ -7,4 +7,8 @@
         <RootNamespace>ToDoApp.Services.Abstration</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ToDoApp.Contracts\ToDoApp.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>
