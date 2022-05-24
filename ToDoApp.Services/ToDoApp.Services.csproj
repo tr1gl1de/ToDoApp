@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ToDoApp.Domain\ToDoApp.Domain.csproj" />
+      <ProjectReference Include="..\ToDoApp.Services.Abstraction\ToDoApp.Services.Abstraction.csproj" />
+    </ItemGroup>
+
 </Project>
