@@ -17,7 +17,14 @@ public class UserService : IUserService
         _repositoryManager = repositoryManager;
         _mapper = mapper;
     }
-    
+
+    public async Task<IEnumerable<UserForReadDto>> GetAllUsers(CancellationToken cancellationToken = default)
+    {
+        var users = await _repositoryManager.UserRepository.GetAllAsync(cancellationToken);
+        var usersDto = _mapper.Map<IEnumerable<UserForReadDto>>(users);
+        return usersDto;
+    }
+
     public async Task<UserForReadDto> RegisterNewUser(UserForCreationDto userForCreationDto, CancellationToken cancellationToken = default)
     {
         var usernameTaken = await _repositoryManager.UserRepository

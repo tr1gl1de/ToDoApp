@@ -7,4 +7,5 @@ public interface IUserService
     Task<UserForReadDto> RegisterNewUser(UserForCreationDto userForCreationDto,
         CancellationToken cancellationToken = default);
     
+    Task<IEnumerable<UserForReadDto>> GetAllUsers(CancellationToken cancellationToken = default);
 }
