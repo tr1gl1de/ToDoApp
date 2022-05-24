@@ -1,25 +1,26 @@
-var builder = WebApplication.CreateBuilder(args);
+using ToDoApp.Persistence;
 
-// Add services to the container.
+namespace ToDoApp.WebApi;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+public class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        var webHost = CreateHostBuilder(args).Build();
+        webHost.Run();
+    }
+
+    private static async Task ApplyMigrations(IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+
+        await using RepositoryDbContext dbContext = scope.ServiceProvider.GetRequiredService<RepositoryDbContext>();
+
+        // for real db
+        // await dbContext.Database.MigrateAsync();
+    }
+
+    private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
