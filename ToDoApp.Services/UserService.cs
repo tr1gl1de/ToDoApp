@@ -36,7 +36,8 @@ public class UserService : IUserService
 
         var newUser = _mapper.Map<User>(userForCreationDto);
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(userForCreationDto.Password);
-        
+        newUser.DateCreation = DateTime.Now;
+
         _repositoryManager.UserRepository.Insert(newUser);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
 
