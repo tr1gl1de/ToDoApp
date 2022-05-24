@@ -26,36 +26,73 @@ public class NoteService : INoteService
         return userNotesRead;
     }
 
-    public async Task<NoteForReadDto> GetByIdAsync(Guid noteId, CancellationToken cancellationToken = default)
+    public async Task<NoteForReadDto> GetByIdAsync(Guid noteId, Guid userId , CancellationToken cancellationToken = default)
     {
+        var user = await _repositoryManager.UserRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+        
         var note = await _repositoryManager.NoteRepository.GetByIdAsync(noteId, cancellationToken);
+
+        if (note is null)
+        {
+            throw new NoteNotFoundException(noteId);
+        }
+
+        if (note.UserId != user.Id)
+        {
+            throw new NoteDoesNotBelongToUserException(userId, noteId);
+        }
+        
         var noteForRead = _mapper.Map<NoteForReadDto>(note);
         return noteForRead;
     }
 
-    public async Task<NoteForReadDto> CreateNoteAsync(NoteForCreationDto note, CancellationToken cancellationToken = default)
+    public async Task<NoteForReadDto> CreateNoteAsync(Guid userId ,NoteForCreationDto note, CancellationToken cancellationToken = default)
     {
+        var user = await _repositoryManager.UserRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+
         var newNote = _mapper.Map<Note>(note);
         _repositoryManager.NoteRepository.Insert(newNote);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         return _mapper.Map<NoteForReadDto>(newNote);
     }
 
-    public async Task UpdateNoteAsync(Guid id ,NoteForUpdateDto note, CancellationToken cancellationToken = default)
+    public async Task UpdateNoteAsync(Guid userId ,Guid id ,NoteForUpdateDto note, CancellationToken cancellationToken = default)
     {
+        var user = await _repositoryManager.UserRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+        
         var oldNote = await _repositoryManager.NoteRepository
             .GetByIdAsync(id, cancellationToken);
+        
         if (oldNote is null)
         {
             throw new NoteNotFoundException(id);
         }
+        
         note.DateUpdate = DateTime.Now;
         _mapper.Map(note, oldNote);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task DeleteNoteAsync(Guid noteId, CancellationToken cancellationToken = default)
+    public async Task DeleteNoteAsync(Guid userId ,Guid noteId, CancellationToken cancellationToken = default)
     {
+        var user = await _repositoryManager.UserRepository.GetByIdAsync(userId, cancellationToken);
+        if (user is null)
+        {
+            throw new UserNotFoundException(userId);
+        }
+        
         var oldNote = await _repositoryManager.NoteRepository
             .GetByIdAsync(noteId, cancellationToken);
         if (oldNote is null)
