@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Contracts", "ToDoApp.Contracts\ToDoApp.Contracts.csproj", "{E2BB728A-EAC0-41F9-94F9-419542D575EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Services.Abstration", "ToDoApp.Services.Abstration\ToDoApp.Services.Abstration.csproj", "{05FF262B-A581-4B05-90B9-B6D4C098E310}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Services.Abstraction", "ToDoApp.Services.Abstraction\ToDoApp.Services.Abstraction.csproj", "{05FF262B-A581-4B05-90B9-B6D4C098E310}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Services", "ToDoApp.Services\ToDoApp.Services.csproj", "{CC191DD4-F7A2-436D-AB02-DC82C78D5593}"
 EndProject
