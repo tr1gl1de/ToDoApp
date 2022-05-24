@@ -13,6 +13,12 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var users = await _context.Users.ToListAsync(cancellationToken);
+        return users;
+    }
+
     public async Task<User> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
