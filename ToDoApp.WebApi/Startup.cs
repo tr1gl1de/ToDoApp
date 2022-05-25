@@ -32,7 +32,7 @@ public class Startup
 
         services.AddDbContextPool<RepositoryDbContext>(builder =>
         {
-            builder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            builder.UseNpgsql(Configuration.GetConnectionString("postgresqlConnection"));
         });
 
         services.AddTransient<ExceptionHandlingMiddleware>();
