@@ -8,6 +8,8 @@ public class NoteConfiguration : IEntityTypeConfiguration<Note>
 {
     public void Configure(EntityTypeBuilder<Note> builder)
     {
+        builder.ToTable("Note");
+        
         builder.HasKey(note => note.Id);
 
         builder.Property(note => note.Id)
