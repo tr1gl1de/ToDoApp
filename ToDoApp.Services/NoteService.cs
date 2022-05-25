@@ -59,7 +59,7 @@ public class NoteService : INoteService
         }
 
         var newNote = _mapper.Map<Note>(note);
-        newNote.DateCreation = DateTime.Now;
+        newNote.DateCreation = DateTime.UtcNow;
         newNote.UserId = userId;
         _repositoryManager.NoteRepository.Insert(newNote);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
@@ -81,7 +81,7 @@ public class NoteService : INoteService
         {
             throw new NoteNotFoundException(id);
         }
-        oldNote.DateUpdate = DateTime.Now;
+        oldNote.DateUpdate = DateTime.UtcNow;
         _mapper.Map(note, oldNote);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
     }
