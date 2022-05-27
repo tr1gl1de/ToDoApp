@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ToDoApp.Contracts;
 using ToDoApp.Entities;
+using ToDoApp.LoggerService;
 
 namespace ToDoApp.WebApi;
 
@@ -19,6 +21,7 @@ internal class Startup
         services.AddSwaggerGen();
         services.AddDbContext<RepositoryDbContext>(options =>
             options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+        services.AddSingleton<ILoggerManager, LoggerManager>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
