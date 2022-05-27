@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Contracts", "ToDoAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.Repository", "ToDoApp.Repository\ToDoApp.Repository.csproj", "{480351FA-7311-4472-8D30-2763248AF540}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoApp.LoggerService", "ToDoApp.LoggerService\ToDoApp.LoggerService.csproj", "{AFDC2141-80C8-4EDB-8140-DFC6B664ECC8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{480351FA-7311-4472-8D30-2763248AF540}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{480351FA-7311-4472-8D30-2763248AF540}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{480351FA-7311-4472-8D30-2763248AF540}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDC2141-80C8-4EDB-8140-DFC6B664ECC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDC2141-80C8-4EDB-8140-DFC6B664ECC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDC2141-80C8-4EDB-8140-DFC6B664ECC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDC2141-80C8-4EDB-8140-DFC6B664ECC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
