@@ -1,4 +1,7 @@
-﻿namespace ToDoApp.WebApi;
+﻿using Microsoft.EntityFrameworkCore;
+using ToDoApp.Entities;
+
+namespace ToDoApp.WebApi;
 
 internal class Startup
 {
@@ -14,6 +17,8 @@ internal class Startup
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddDbContext<RepositoryDbContext>(options =>
+            options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
