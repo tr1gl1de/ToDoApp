@@ -5,18 +5,14 @@ namespace ToDoApp.Repository;
 
 public class RepositoryWrapper : IRepositoryWrapper
 {
-    private readonly RepositoryDbContext _repositoryDbContext;
+    private RepositoryDbContext _repositoryDbContext;
     private IUserRepository _user;
     private INoteRepository _note;
 
     public RepositoryWrapper(
-        RepositoryDbContext repositoryDbContext,
-        IUserRepository user,
-        INoteRepository note)
+        RepositoryDbContext repositoryDbContext)
     {
         _repositoryDbContext = repositoryDbContext;
-        _user = user;
-        _note = note;
     }
 
     public async Task SaveAsync()
