@@ -4,7 +4,7 @@ namespace ToDoApp.Contracts;
 
 public interface INoteRepository
 {
-    Task<Note> GetNoteById(Guid noteId);
+    Task<Note?> GetNoteById(Guid noteId);
     Task<IEnumerable<Note>> GetAllNotes();
     Task<IEnumerable<Note>> GetNotesByUserId(Guid userId);
     void CreateNote(Note note);
