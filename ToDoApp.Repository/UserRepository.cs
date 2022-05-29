@@ -25,6 +25,14 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
         return user;
     }
 
+    public async Task<bool> UserIsExits(string username)
+    {
+        var userIsExits = await FindByCondition(
+            u => u.Username.Equals(username))
+            .AnyAsync();
+        return userIsExits;
+    }
+
     public void CreateUser(User user)
     {
         Create(user);
