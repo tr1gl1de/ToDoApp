@@ -1,5 +1,6 @@
 ﻿using ToDoApp.Contracts;
 using ToDoApp.Entities;
+using ToDoApp.Entities.Models;
 
 namespace ToDoApp.Repository;
 
@@ -13,6 +14,11 @@ public class RepositoryWrapper : IRepositoryWrapper
         RepositoryDbContext repositoryDbContext)
     {
         _repositoryDbContext = repositoryDbContext;
+    }
+
+    public void AddRefreshToken(RefreshToken token)
+    {
+        _repositoryDbContext.RefreshTokens.Add(token);
     }
 
     public async Task SaveAsync()
