@@ -4,7 +4,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using ToDoApp.Entities;
+using ToDoApp.WebApi.Filters;
 using ToDoApp.WebApi.Helpers;
 
 namespace ToDoApp.WebApi.Extensions;
@@ -24,6 +26,16 @@ public static class ConfigurationExtensions
             {  
                 options.IncludeXmlComments(d);  
             });  
+            
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Put Your access token here (drop **Bearer** prefix):",
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT"
+            });
+            
+            options.OperationFilter<OpenApiFilter>();
             
         });
 
