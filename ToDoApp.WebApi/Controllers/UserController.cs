@@ -86,10 +86,47 @@ public class UserController : ControllerBase
             UserId = user.Id,
             ExpirationTime = DateTime.UtcNow.AddDays(refreshTokenLifetime)
         };
-        _repository.AddRefreshToken(refreshToken);
+        _repository.RefreshToken.AddRefreshToken(refreshToken);
         await _repository.SaveAsync();
 
         var tokenPair = _tokenHelper.IssueTokenPair(user.Id, refreshToken.Id);
+        var tokenPairDto = _mapper.Map<TokenPairDto>(tokenPair);
+
+        return Ok(tokenPairDto);
+    }
+
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshTokenPair([FromBody] string refreshToken)
+    {
+        var refreshTokenClaims = _tokenHelper.ParseToken(refreshToken);
+        if (refreshTokenClaims is null)
+        {
+            return BadRequest("Invalid refresh token was provided.");
+        }
+
+        var refreshTokenId = Guid.Parse(refreshTokenClaims["jti"]);
+        var refreshTokenEntity = await _repository.RefreshToken.GetRefreshTokenByIdAsync(refreshTokenId);
+        if (refreshTokenEntity is null)
+        {
+            return Conflict("Provided refresh token has already been used");
+        }
+        
+        _repository.RefreshToken.DeleteRefreshToken(refreshTokenEntity);
+        await _repository.SaveAsync();
+
+        var userId = Guid.Parse(refreshTokenClaims["sub"]);
+        var refreshTokenLifetime = int.Parse(_configuration["JwtAuth:RefreshTokenLifetime"]);
+        var newRefreshTokenEntity = new RefreshToken()
+        {
+            Id = Guid.NewGuid(),
+            UserId = userId,
+            ExpirationTime = DateTime.UtcNow.AddDays(refreshTokenLifetime)
+        };
+        
+        _repository.RefreshToken.AddRefreshToken(newRefreshTokenEntity);
+        await _repository.SaveAsync();
+
+        var tokenPair = _tokenHelper.IssueTokenPair(userId, refreshTokenEntity.Id);
         var tokenPairDto = _mapper.Map<TokenPairDto>(tokenPair);
 
         return Ok(tokenPairDto);
