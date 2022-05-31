@@ -69,7 +69,7 @@ public class NoteController : ControllerBase
         return Ok(readNote);
     }
 
-    [HttpGet("all/user")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetUserNotes()
     {
         var subClaim = User.Claims.Single(claim => claim.Type == "sub");
@@ -85,5 +85,55 @@ public class NoteController : ControllerBase
         var userNotesRead = _mapper.Map<ICollection<NoteForReadDto>>(userNotes);
         
         return Ok(userNotesRead);
+    }
+
+    [HttpPut("{noteId:guid}")]
+    public async Task<IActionResult> UpdateNote([FromRoute]Guid noteId, [FromBody] NoteForUpdateDto noteForUpdateDto)
+    {
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
+        
+        var note = await _repository.Note.GetNoteById(noteId);
+        if (note is null)
+        {
+            return NotFound("Not found note with this id");
+        }
+        
+        if (note.UserId != userId)
+        {
+            return Conflict("This note does not belong to you");
+        }
+        note.DateUpdate = DateTime.UtcNow;
+        _mapper.Map(noteForUpdateDto, note);
+        _repository.Note.UpdateNote(note);
+        
+        await _repository.SaveAsync();
+        
+        return NoContent();
+    }
+
+    [HttpDelete("{noteId:guid}")]
+    public async Task<IActionResult> DeleteNote([FromRoute] Guid noteId)
+    {
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
+        
+        var note = await _repository.Note.GetNoteById(noteId);
+        if (note is null)
+        {
+            return NotFound("Not found note with this id");
+        }
+        
+        if (note.UserId != userId)
+        {
+            return Conflict("This note does not belong to you");
+        }
+        
+        _repository.Note.DeleteNote(note);
+        await _repository.SaveAsync();
+
+        var readDto = _mapper.Map<NoteForReadDto>(note);
+
+        return Ok(readDto);
     }
 }
