@@ -51,4 +51,25 @@ public class UserController : ControllerBase
             
         return Ok(userRead);
     }
+    
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
+    {
+        var user = await _repository.User.GetUserById(userId);
+        return Ok(user);
+    }
+    
+    [HttpGet("username/{username}")]
+    public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
+    {
+        var user = await _repository.User.GetUserByUsername(username);
+        return Ok(user);
+    }
+
+    [HttpGet("username/{username}/details")]
+    public async Task<IActionResult> GetUSerByUsernameWithNotes([FromRoute] string username)
+    {
+        var user = await _repository.User.GetUserByUsernameWithNotes(username);
+        return Ok(user);
+    }
 }
