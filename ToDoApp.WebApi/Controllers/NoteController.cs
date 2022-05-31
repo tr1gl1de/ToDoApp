@@ -1,5 +1,6 @@
 ﻿using System.Net.Mime;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Contracts;
 using ToDoApp.Entities.DataTransferObjects.Note;
@@ -9,6 +10,7 @@ namespace ToDoApp.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
 public class NoteController : ControllerBase
@@ -22,9 +24,12 @@ public class NoteController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpPost("{userId:guid}")]
-    public async Task<IActionResult> CreateNote([FromRoute] Guid userId,[FromBody] NoteForCreationDto noteCreate)
+    [HttpPost]
+    public async Task<IActionResult> CreateNote([FromBody] NoteForCreationDto noteCreate)
     {
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
+        
         var userExist = await _repository.User.UserIsExits(userId);
         if (!userExist)
         {
@@ -46,19 +51,30 @@ public class NoteController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetNoteById([FromRoute] Guid id)
     {
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
+        
         var note = await _repository.Note.GetNoteById(id);
         if (note is null)
         {
             return NotFound("Not found note with this id");
+        }
+
+        if (note.UserId != userId)
+        {
+            return Conflict("This note does not belong to you");
         }
         
         var readNote = _mapper.Map<NoteForReadDto>(note);
         return Ok(readNote);
     }
 
-    [HttpGet("all/user/{userId:guid}")]
-    public async Task<IActionResult> GetUserNotes([FromRoute] Guid userId)
+    [HttpGet("all/user")]
+    public async Task<IActionResult> GetUserNotes()
     {
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
+        
         var userExist = await _repository.User.UserIsExits(userId);
         if (!userExist)
         {
