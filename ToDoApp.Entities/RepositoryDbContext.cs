@@ -8,6 +8,7 @@ public class RepositoryDbContext : DbContext
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Note> Notes => Set<Note>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options)
         : base(options)
