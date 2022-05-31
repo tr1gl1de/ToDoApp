@@ -64,7 +64,15 @@ public class UserController : ControllerBase
         return Ok(userRead);
     }
 
-    [HttpPost("auth")]
+    /// <summary>Authenticate the user.</summary>
+    /// <param name="userForAuth">User authentication information.</param>
+    /// <response code="200">Authentication token pair for specified user credentials.</response>
+    /// <response code="404">User with specified username does not exist.</response>
+    /// <response code="409">Incorrect password was specified.</response>
+    [HttpPost("authenticate")]
+    [ProducesResponseType(typeof(TokenPairDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AuthenticateUser([FromBody] UserForAuthenticateDto userForAuth)
     {
         var user = await _repository.User
@@ -95,7 +103,15 @@ public class UserController : ControllerBase
         return Ok(tokenPairDto);
     }
 
+    /// <summary>Refresh token pair.</summary>
+    /// <param name="refreshToken">Refresh token.</param>
+    /// <response code="200">A new token pair.</response>
+    /// <response code="400">Invalid refresh token was provided.</response>
+    /// <response code="409">Provided refresh token has already been used.</response>
     [HttpPost("refresh")]
+    [ProducesResponseType(typeof(TokenPairDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> RefreshTokenPair([FromBody] string refreshToken)
     {
         var refreshTokenClaims = _tokenHelper.ParseToken(refreshToken);
@@ -132,8 +148,11 @@ public class UserController : ControllerBase
         return Ok(tokenPairDto);
     }
 
+    /// <summary>Get information about the current user.</summary>
+    /// <response code="200">Current user information.</response>
     [HttpGet("who-am-i")]
     [Authorize]
+    [ProducesResponseType(typeof(UserForReadDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCurrentUserInfo()
     {
         var subClaim = User.Claims.Single(claim => claim.Type == "sub");
@@ -141,6 +160,8 @@ public class UserController : ControllerBase
 
         var user = await _repository.User.GetUserById(userId);
 
-        return Ok(user);
+        var userDto = _mapper.Map<UserForReadDto>(user);
+
+        return Ok(userDto);
     }
 }
