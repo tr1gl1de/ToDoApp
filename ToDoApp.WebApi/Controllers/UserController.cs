@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Contracts;
 using ToDoApp.Entities.DataTransferObjects;
@@ -94,24 +95,15 @@ public class UserController : ControllerBase
         return Ok(tokenPairDto);
     }
 
-    [HttpGet("{userId:guid}")]
-    public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
+    [HttpGet("who-am-i")]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUserInfo()
     {
-        var user = await _repository.User.GetUserById(userId);
-        return Ok(user);
-    }
-    
-    [HttpGet("username/{username}")]
-    public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
-    {
-        var user = await _repository.User.GetUserByUsername(username);
-        return Ok(user);
-    }
+        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
+        var userId = Guid.Parse(subClaim.Value);
 
-    [HttpGet("username/{username}/details")]
-    public async Task<IActionResult> GetUSerByUsernameWithNotes([FromRoute] string username)
-    {
-        var user = await _repository.User.GetUserByUsernameWithNotes(username);
+        var user = await _repository.User.GetUserById(userId);
+
         return Ok(user);
     }
 }
