@@ -33,6 +33,14 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
         return userIsExits;
     }
 
+    public async Task<bool> UserIsExits(Guid id)
+    {
+        var userIsExits = await FindByCondition(
+                u => u.Id.Equals(id))
+            .AnyAsync();
+        return userIsExits;
+    }
+
     public void CreateUser(User user)
     {
         Create(user);
