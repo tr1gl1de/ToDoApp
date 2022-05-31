@@ -32,7 +32,7 @@ internal class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.ConfigureExceptionHandler();
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseAuthentication();
