@@ -14,7 +14,7 @@ namespace ToDoApp.WebApi.Controllers;
 [ApiController]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
-public class UserController : ControllerBase
+public class UserController : BaseController
 {
     private ILoggerManager _logger;
     private IRepositoryWrapper _repository;
@@ -155,8 +155,7 @@ public class UserController : ControllerBase
     [ProducesResponseType(typeof(UserForReadDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCurrentUserInfo()
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
 
         var user = await _repository.User.GetUserById(userId);
 

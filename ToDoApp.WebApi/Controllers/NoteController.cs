@@ -13,7 +13,7 @@ namespace ToDoApp.WebApi.Controllers;
 [Authorize]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
-public class NoteController : ControllerBase
+public class NoteController : BaseController
 {
     private IRepositoryWrapper _repository;
     private IMapper _mapper;
@@ -33,8 +33,7 @@ public class NoteController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateNote([FromBody] NoteForCreationDto noteCreate)
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
         
         var userExist = await _repository.User.UserIsExits(userId);
         if (!userExist)
@@ -65,8 +64,7 @@ public class NoteController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> GetNoteById([FromRoute] Guid id)
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
         
         var note = await _repository.Note.GetNoteById(id);
         if (note is null)
@@ -91,8 +89,7 @@ public class NoteController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserNotes()
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
         
         var userExist = await _repository.User.UserIsExits(userId);
         if (!userExist)
@@ -118,8 +115,7 @@ public class NoteController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> UpdateNote([FromRoute]Guid noteId, [FromBody] NoteForUpdateDto noteForUpdateDto)
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
         
         var note = await _repository.Note.GetNoteById(noteId);
         if (note is null)
@@ -148,8 +144,7 @@ public class NoteController : ControllerBase
     [HttpDelete("{noteId:guid}")]
     public async Task<IActionResult> DeleteNote([FromRoute] Guid noteId)
     {
-        var subClaim = User.Claims.Single(claim => claim.Type == "sub");
-        var userId = Guid.Parse(subClaim.Value);
+        var userId = GetAuthUserId();
         
         var note = await _repository.Note.GetNoteById(noteId);
         if (note is null)
