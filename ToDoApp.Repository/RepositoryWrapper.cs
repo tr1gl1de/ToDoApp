@@ -9,16 +9,13 @@ public class RepositoryWrapper : IRepositoryWrapper
     private RepositoryDbContext _repositoryDbContext;
     private IUserRepository _user;
     private INoteRepository _note;
+    private IRefreshTokenRepository _refreshToken;
+
 
     public RepositoryWrapper(
         RepositoryDbContext repositoryDbContext)
     {
         _repositoryDbContext = repositoryDbContext;
-    }
-
-    public void AddRefreshToken(RefreshToken token)
-    {
-        _repositoryDbContext.RefreshTokens.Add(token);
     }
 
     public async Task SaveAsync()
@@ -49,6 +46,19 @@ public class RepositoryWrapper : IRepositoryWrapper
             }
 
             return _note;
+        }
+    }
+
+    public IRefreshTokenRepository RefreshToken
+    {
+        get
+        {
+            if (_refreshToken is null)
+            {
+                _refreshToken = new RefreshTokenRepository(_repositoryDbContext);
+            }
+
+            return _refreshToken;
         }
     }
 }

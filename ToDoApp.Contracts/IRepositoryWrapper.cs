@@ -6,6 +6,6 @@ public interface IRepositoryWrapper
 {
     IUserRepository User { get; }
     INoteRepository Note { get; }
-    void AddRefreshToken(RefreshToken token);
+    IRefreshTokenRepository RefreshToken { get; }
     Task SaveAsync();
 }
