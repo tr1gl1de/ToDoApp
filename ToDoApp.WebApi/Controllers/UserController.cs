@@ -2,8 +2,10 @@ using System.Net.Mime;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Contracts;
+using ToDoApp.Entities.DataTransferObjects;
 using ToDoApp.Entities.DataTransferObjects.User;
 using ToDoApp.Entities.Models;
+using ToDoApp.WebApi.Helpers;
 
 namespace ToDoApp.WebApi.Controllers;
 
@@ -16,12 +18,21 @@ public class UserController : ControllerBase
     private ILoggerManager _logger;
     private IRepositoryWrapper _repository;
     private IMapper _mapper;
+    private IConfiguration _configuration;
+    private JwtTokenHelper _tokenHelper;
 
-    public UserController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper)
+    public UserController(
+        ILoggerManager logger,
+        IRepositoryWrapper repository,
+        IMapper mapper,
+        IConfiguration configuration,
+        JwtTokenHelper tokenHelper)
     {
         _logger = logger;
         _repository = repository;
         _mapper = mapper;
+        _configuration = configuration;
+        _tokenHelper = tokenHelper;
     }
 
     /// <summary>Register a new user.</summary>
@@ -51,7 +62,38 @@ public class UserController : ControllerBase
             
         return Ok(userRead);
     }
-    
+
+    [HttpPost("auth")]
+    public async Task<IActionResult> AuthenticateUser([FromBody] UserForAuthenticateDto userForAuth)
+    {
+        var user = await _repository.User
+            .GetUserByUsername(userForAuth.Username);
+        if (user is null)
+        {
+            return NotFound("Not found user with this username");
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(userForAuth.Password, user.Password))
+        {
+            return Conflict("Incorrect password");
+        }
+
+        var refreshTokenLifetime = int.Parse(_configuration["JwtAuth:RefreshTokenLifetime"]);
+        var refreshToken = new RefreshToken()
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            ExpirationTime = DateTime.UtcNow.AddDays(refreshTokenLifetime)
+        };
+        _repository.AddRefreshToken(refreshToken);
+        await _repository.SaveAsync();
+
+        var tokenPair = _tokenHelper.IssueTokenPair(user.Id, refreshToken.Id);
+        var tokenPairDto = _mapper.Map<TokenPairDto>(tokenPair);
+
+        return Ok(tokenPairDto);
+    }
+
     [HttpGet("{userId:guid}")]
     public async Task<IActionResult> GetUserById([FromRoute] Guid userId)
     {
