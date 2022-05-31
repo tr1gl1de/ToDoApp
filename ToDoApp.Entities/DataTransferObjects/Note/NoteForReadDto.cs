@@ -2,6 +2,10 @@
 
 public class NoteForReadDto
 {   
+    /// <summary>Identifier of note</summary>
+    /// <example>61EC3022-799A-45D7-83A5-B1C4F7886FBB</example>
+    public Guid Id { get; set; }
+    
     /// <summary>Name of note</summary>
     /// <example>My To-Do list</example>
     public string Name { get; set; } = string.Empty;
