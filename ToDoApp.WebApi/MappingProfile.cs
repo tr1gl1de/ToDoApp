@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ToDoApp.Entities.DataTransferObjects.Note;
 using ToDoApp.Entities.DataTransferObjects.User;
 using ToDoApp.Entities.Models;
 
@@ -10,5 +11,8 @@ public class MappingProfile : Profile
     {
         CreateMap<UserForRegisterDto, User>();
         CreateMap<User, UserForReadDto>();
+
+        CreateMap<NoteForCreationDto, Note>();
+        CreateMap<Note, NoteForReadDto>();
     }
 }
