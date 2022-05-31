@@ -9,4 +9,7 @@ public interface IUserRepository
     Task<bool> UserIsExits(string username);
     Task<bool> UserIsExits(Guid id);
     void CreateUser(User user);
+    
+    // for test
+    Task<User?> GetUserByUsernameWithNotes(string username);
 }

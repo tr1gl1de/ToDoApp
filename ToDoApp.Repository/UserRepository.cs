@@ -45,4 +45,13 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
     {
         Create(user);
     }
+
+    // for test
+    public async Task<User?> GetUserByUsernameWithNotes(string username)
+    {
+        var user = await FindByCondition(u => u.Username == username)
+            .Include(u => u.Notes)
+            .FirstOrDefaultAsync();
+        return user;
+    }
 }
