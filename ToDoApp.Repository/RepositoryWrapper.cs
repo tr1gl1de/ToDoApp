@@ -1,6 +1,5 @@
 ﻿using ToDoApp.Contracts;
 using ToDoApp.Entities;
-using ToDoApp.Entities.Models;
 
 namespace ToDoApp.Repository;
 

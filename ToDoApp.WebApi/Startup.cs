@@ -1,8 +1,5 @@
 ﻿using System.Reflection;
 using NLog;
-using ToDoApp.Contracts;
-using ToDoApp.LoggerService;
-using ToDoApp.Repository;
 using ToDoApp.WebApi.Extensions;
 
 namespace ToDoApp.WebApi;
@@ -24,9 +21,8 @@ internal class Startup
         services.AddSwagger();
         services.AddDbContext();
         services.AddJwtAuth(Configuration);
-        services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+        services.AddServices();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

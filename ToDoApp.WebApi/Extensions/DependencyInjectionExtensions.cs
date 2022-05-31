@@ -5,7 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ToDoApp.Contracts;
 using ToDoApp.Entities;
+using ToDoApp.LoggerService;
+using ToDoApp.Repository;
 using ToDoApp.WebApi.Filters;
 using ToDoApp.WebApi.Helpers;
 
@@ -76,6 +79,14 @@ public static class DependencyInjectionExtensions
     {
         services.AddDbContext<RepositoryDbContext>(options =>
             options.UseInMemoryDatabase("test_base"));
+        return services;
+    }
+
+    public static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ILoggerManager, LoggerManager>();
+        services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+
         return services;
     }
 }

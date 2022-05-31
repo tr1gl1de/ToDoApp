@@ -1,6 +1,4 @@
-﻿using ToDoApp.Entities.Models;
-
-namespace ToDoApp.Contracts;
+﻿namespace ToDoApp.Contracts;
 
 public interface IRepositoryWrapper
 {
