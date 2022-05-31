@@ -24,14 +24,20 @@ internal class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            var projectDirectory = AppContext.BaseDirectory;
-            var projectName = Assembly.GetExecutingAssembly().GetName().Name;
-            var xmlFileName = $"{projectName}.xml";
+            var currentAssembly = Assembly.GetExecutingAssembly();  
+            var xmlDocs = currentAssembly.GetReferencedAssemblies()  
+                .Union(new AssemblyName[] { currentAssembly.GetName()})  
+                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))  
+                .Where(f=>File.Exists(f)).ToArray(); 
             
-            options.IncludeXmlComments(Path.Combine(projectDirectory,xmlFileName));
+            Array.ForEach(xmlDocs, (d) =>  
+            {  
+                options.IncludeXmlComments(d);  
+            });  
+            
         });
         services.AddDbContext<RepositoryDbContext>(options =>
-            options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            options.UseInMemoryDatabase("test_base"));
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
