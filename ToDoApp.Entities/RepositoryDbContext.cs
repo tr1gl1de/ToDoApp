@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using ToDoApp.Entities.Extensions;
 using ToDoApp.Entities.Models;
 
 namespace ToDoApp.Entities;
@@ -13,8 +14,10 @@ public class RepositoryDbContext : DbContext
     public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder builder) =>
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())
+            .Seed();
 }
