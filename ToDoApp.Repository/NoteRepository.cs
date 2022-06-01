@@ -32,6 +32,33 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
         return userNotes;
     }
 
+    public async Task<IEnumerable<Note>> SearchNotesByNameAsync(Guid userId ,string name)
+    {
+        var notes = FindByCondition(n => n.UserId == userId);
+        
+        SearchByName(ref notes, name);
+
+        var resultNotes = await notes.ToListAsync();
+        
+        return resultNotes;
+    }
+
+    private void SearchByName(ref IQueryable<Note> notes, string name)
+    {
+        if (!notes.Any() || string.IsNullOrWhiteSpace(name))
+        {
+            return;
+        }
+        
+        notes = notes.Where(n => n.Name
+            .ToLower()
+            .Contains(name
+                .Trim()
+                .ToLower())
+        );
+    }
+
+
     public void CreateNote(Note note)
     {
         Create(note);

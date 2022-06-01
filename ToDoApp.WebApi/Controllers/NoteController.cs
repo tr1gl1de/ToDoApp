@@ -103,6 +103,26 @@ public class NoteController : BaseController
         return Ok(userNotesRead);
     }
 
+    /// <summary>Search user notes.</summary>
+    /// <response code="200">Notes received.</response>
+    /// <response code="404">User not found.</response> 
+    [HttpGet("search/{name}")]
+    public async Task<IActionResult> SearchUserNotesAsync([FromRoute] string name ="")
+    {
+        var userId = GetAuthUserId();
+
+        var userExist = await _repository.User.UserIsExits(userId);
+        if (!userExist)
+        {
+            return NotFound("Not found user with this id");
+        }
+
+        var userNotes = await _repository.Note.SearchNotesByNameAsync(userId ,name);
+        var userNotesRead = _mapper.Map<ICollection<NoteForReadDto>>(userNotes);
+
+        return Ok(userNotesRead);
+    }
+
     /// <summary>Update note with id.</summary>
     /// <param name="noteId">Identifier of note.</param>
     /// <param name="noteForUpdateDto">Object note.</param>
