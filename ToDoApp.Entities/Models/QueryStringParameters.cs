@@ -22,4 +22,8 @@ public abstract class QueryStringParameters
             _pageSize = (value > maxPageSize) ? maxPageSize : value;
         }
     }
+    
+    /// <summary>Sort field name</summary>
+    /// <example>name</example>
+    public string OrderBy { get; set; }
 }

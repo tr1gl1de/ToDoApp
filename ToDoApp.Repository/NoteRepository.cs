@@ -8,9 +8,12 @@ using ToDoApp.Entities.Models;
 namespace ToDoApp.Repository;
 
 public class NoteRepository : RepositoryBase<Note>, INoteRepository
-{   
-    public NoteRepository(RepositoryDbContext repositoryDbContext) : base(repositoryDbContext)
+{
+    private ISortHelper<Note> _helper;
+
+    public NoteRepository(ISortHelper<Note> helper,RepositoryDbContext repositoryDbContext) : base(repositoryDbContext)
     {
+        _helper = helper;
     }
 
     public async Task<Note?> GetNoteById(Guid noteId)
@@ -20,6 +23,9 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
         return note;
     }
 
+    #region Old_methods
+
+    [Obsolete($"Use {nameof(GetNotesByUserId)}() method")]
     public async Task<IEnumerable<Note>> GetAllNotes()
     {
         var notes = await FindAll()
@@ -34,15 +40,6 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
         return userNotes;
     }
 
-    public async Task<PagedList<Note>> GetNotesByUserId(Guid userId, NoteQueryStringParameters notesParam)
-    {
-        var userNotes = FindByCondition(n => n.UserId == userId);
-        
-        return await PagedList<Note>.ToPagedListAsync(userNotes, 
-            notesParam.PageNumber,
-            notesParam.PageSize);
-    }
-
     public async Task<IEnumerable<Note>> SearchNotesByNameAsync(Guid userId ,string name)
     {
         var notes = FindByCondition(n => n.UserId == userId);
@@ -53,14 +50,27 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
         
         return resultNotes;
     }
+    #endregion
+    public async Task<PagedList<Note>> GetNotesByUserId(Guid userId, NoteQueryStringParameters notesParam)
+    {
+        var userNotes = FindByCondition(n => n.UserId == userId);
+
+        var sortedNotes = _helper.ApplySort(userNotes, notesParam.OrderBy);
+        
+        return await PagedList<Note>.ToPagedListAsync(sortedNotes, 
+            notesParam.PageNumber,
+            notesParam.PageSize);
+    }
 
     public async Task<PagedList<Note>> SearchNotesByNameAsync(Guid userId, NoteQueryStringParametersForSearch notesParam)
     {
         var notes = FindByCondition(n => n.UserId == userId);
         
         SearchByName(ref notes, notesParam.Name);
+
+        var sortedNotes = _helper.ApplySort(notes, notesParam.OrderBy);
         
-        return await PagedList<Note>.ToPagedListAsync(notes,
+        return await PagedList<Note>.ToPagedListAsync(sortedNotes,
             notesParam.PageNumber,
             notesParam.PageSize);
     }

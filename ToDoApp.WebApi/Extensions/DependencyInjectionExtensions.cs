@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ToDoApp.Contracts;
 using ToDoApp.Entities;
+using ToDoApp.Entities.Helpers;
+using ToDoApp.Entities.Models;
 using ToDoApp.LoggerService;
 using ToDoApp.Repository;
 using ToDoApp.WebApi.Filters;
@@ -84,6 +86,7 @@ public static class DependencyInjectionExtensions
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<ISortHelper<Note>, SortHelper<Note>>();
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 

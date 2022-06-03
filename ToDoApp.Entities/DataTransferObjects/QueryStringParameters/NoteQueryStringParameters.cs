@@ -2,4 +2,8 @@
 
 public class NoteQueryStringParameters : Models.QueryStringParameters
 {
+    public NoteQueryStringParameters()
+    {
+        OrderBy = "name";
+    }
 }

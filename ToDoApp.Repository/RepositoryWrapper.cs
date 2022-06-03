@@ -1,5 +1,7 @@
 ﻿using ToDoApp.Contracts;
 using ToDoApp.Entities;
+using ToDoApp.Entities.Helpers;
+using ToDoApp.Entities.Models;
 
 namespace ToDoApp.Repository;
 
@@ -9,12 +11,15 @@ public class RepositoryWrapper : IRepositoryWrapper
     private IUserRepository _user;
     private INoteRepository _note;
     private IRefreshTokenRepository _refreshToken;
+    private ISortHelper<Note> _helper;
 
 
     public RepositoryWrapper(
+        ISortHelper<Note> helper,
         RepositoryDbContext repositoryDbContext)
     {
         _repositoryDbContext = repositoryDbContext;
+        _helper = helper;
     }
 
     public async Task SaveAsync()
@@ -41,7 +46,7 @@ public class RepositoryWrapper : IRepositoryWrapper
         {
             if (_note is null)
             {
-                _note = new NoteRepository(_repositoryDbContext);
+                _note = new NoteRepository(_helper ,_repositoryDbContext);
             }
 
             return _note;
