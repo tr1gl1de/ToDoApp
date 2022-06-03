@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Contracts;
 using ToDoApp.Entities.DataTransferObjects.Note;
+using ToDoApp.Entities.DataTransferObjects.QueryStringParameters;
 using ToDoApp.Entities.Models;
 
 namespace ToDoApp.WebApi.Controllers;
@@ -87,7 +88,7 @@ public class NoteController : BaseController
     [HttpGet("all")]
     [ProducesResponseType(typeof(NoteForReadDto[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUserNotes()
+    public async Task<IActionResult> GetUserNotes([FromQuery] NoteQueryStringParameters notesParam)
     {
         var userId = GetAuthUserId();
         
@@ -97,7 +98,10 @@ public class NoteController : BaseController
             return NotFound("Not found user with this id");
         }
         
-        var userNotes = await _repository.Note.GetNotesByUserId(userId);
+        var userNotes = await _repository.Note.GetNotesByUserId(userId, notesParam);
+
+        AddPaginationInHeaders(userNotes);
+        
         var userNotesRead = _mapper.Map<ICollection<NoteForReadDto>>(userNotes);
         
         return Ok(userNotesRead);
@@ -106,8 +110,8 @@ public class NoteController : BaseController
     /// <summary>Search user notes.</summary>
     /// <response code="200">Notes received.</response>
     /// <response code="404">User not found.</response> 
-    [HttpGet("search/{name}")]
-    public async Task<IActionResult> SearchUserNotesAsync([FromRoute] string name ="")
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchUserNotesAsync([FromQuery] NoteQueryStringParametersForSearch notesParam)
     {
         var userId = GetAuthUserId();
 
@@ -117,7 +121,7 @@ public class NoteController : BaseController
             return NotFound("Not found user with this id");
         }
 
-        var userNotes = await _repository.Note.SearchNotesByNameAsync(userId ,name);
+        var userNotes = await _repository.Note.SearchNotesByNameAsync(userId ,notesParam);
         var userNotesRead = _mapper.Map<ICollection<NoteForReadDto>>(userNotes);
 
         return Ok(userNotesRead);
