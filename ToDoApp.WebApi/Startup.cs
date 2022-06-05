@@ -21,6 +21,7 @@ internal class Startup
         services.AddSwagger();
         services.AddDbContext();
         services.AddJwtAuth(Configuration);
+        services.AddCorsPolicy();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddServices();
     }
@@ -35,6 +36,7 @@ internal class Startup
         app.ConfigureExceptionHandler();
         app.UseRouting();
         app.UseHttpsRedirection();
+        app.UseCors("EnableCORS");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints => endpoints.MapControllers());

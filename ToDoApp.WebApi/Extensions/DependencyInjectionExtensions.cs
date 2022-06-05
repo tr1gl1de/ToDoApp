@@ -21,17 +21,17 @@ public static class DependencyInjectionExtensions
     public static IServiceCollection AddSwagger(this IServiceCollection services) =>
         services.AddSwaggerGen(options =>
         {
-            var currentAssembly = Assembly.GetExecutingAssembly();  
-            var xmlDocs = currentAssembly.GetReferencedAssemblies()  
-                .Union(new AssemblyName[] { currentAssembly.GetName()})  
-                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))  
-                .Where(f=>File.Exists(f)).ToArray(); 
-            
-            Array.ForEach(xmlDocs, (d) =>  
-            {  
-                options.IncludeXmlComments(d);  
-            });  
-            
+            var currentAssembly = Assembly.GetExecutingAssembly();
+            var xmlDocs = currentAssembly.GetReferencedAssemblies()
+                .Union(new AssemblyName[] {currentAssembly.GetName()})
+                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                .Where(f => File.Exists(f)).ToArray();
+
+            Array.ForEach(xmlDocs, (d) =>
+            {
+                options.IncludeXmlComments(d);
+            });
+
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "Put Your access token here (drop **Bearer** prefix):",
@@ -39,9 +39,9 @@ public static class DependencyInjectionExtensions
                 Scheme = "bearer",
                 BearerFormat = "JWT"
             });
-            
+
             options.OperationFilter<OpenApiFilter>();
-            
+
         });
 
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration configuration)
@@ -90,6 +90,18 @@ public static class DependencyInjectionExtensions
         services.AddSingleton<ILoggerManager, LoggerManager>();
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
+        return services;
+    }
+
+    public static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+            options.AddPolicy("EnableCORS", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            }));
         return services;
     }
 }
