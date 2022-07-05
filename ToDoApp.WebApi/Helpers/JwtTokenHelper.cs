@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using ToDoApp.Entities.Models;
 using ToDoApp.WebApi.Extensions;
 
 namespace ToDoApp.WebApi.Helpers;

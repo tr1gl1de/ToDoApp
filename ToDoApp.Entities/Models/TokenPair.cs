@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.WebApi.Helpers;
+﻿namespace ToDoApp.Entities.Models;
 
 public class TokenPair
 {
