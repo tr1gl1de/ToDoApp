@@ -75,6 +75,11 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
             notesParam.PageSize);
     }
 
+    public async Task<int> GetCountNotes()
+    {
+        return await FindAll().CountAsync();
+    }
+
     private void SearchByName(ref IQueryable<Note> notes, string name)
     {
         if (!notes.Any() || string.IsNullOrWhiteSpace(name))

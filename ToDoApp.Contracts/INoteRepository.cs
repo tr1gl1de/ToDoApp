@@ -12,6 +12,7 @@ public interface INoteRepository
     Task<PagedList<Note>> GetNotesByUserId(Guid userId, NoteQueryStringParameters notesParam);
     Task<IEnumerable<Note>> SearchNotesByNameAsync(Guid userId ,string name);
     Task<PagedList<Note>> SearchNotesByNameAsync(Guid userId, NoteQueryStringParametersForSearch notesParam);
+    Task<int> GetCountNotes();
     void CreateNote(Note note);
     void UpdateNote(Note note);
     void DeleteNote(Note note);

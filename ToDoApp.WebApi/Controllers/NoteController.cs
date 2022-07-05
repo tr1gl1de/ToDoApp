@@ -127,6 +127,16 @@ public class NoteController : BaseController
         return Ok(userNotesRead);
     }
 
+    /// <summary>Get count of notes.</summary>
+    /// <response code="200">Count received.</response>
+    [AllowAnonymous]
+    [HttpGet("count")]
+    public async Task<IActionResult> GetNotesCount()
+    {
+        var count = await _repository.Note.GetCountNotes();
+        return Ok(count);
+    }
+
     /// <summary>Update note with id.</summary>
     /// <param name="noteId">Identifier of note.</param>
     /// <param name="noteForUpdateDto">Object note.</param>
