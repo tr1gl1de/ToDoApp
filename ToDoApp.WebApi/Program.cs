@@ -1,4 +1,4 @@
-using ToDoApp.WebApi;
+namespace ToDoApp.WebApi;
 
 internal static class Program
 {

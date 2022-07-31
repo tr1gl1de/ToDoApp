@@ -3,7 +3,6 @@ using ToDoApp.Entities.DataTransferObjects;
 using ToDoApp.Entities.DataTransferObjects.Note;
 using ToDoApp.Entities.DataTransferObjects.User;
 using ToDoApp.Entities.Models;
-using ToDoApp.WebApi.Helpers;
 
 namespace ToDoApp.WebApi;
 
