@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using ToDo.Persistence;
 using ToDoApp.Contracts;
-using ToDoApp.Entities;
 
 namespace ToDoApp.Repository;
 

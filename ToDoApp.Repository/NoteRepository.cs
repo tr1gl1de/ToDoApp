@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ToDo.Persistence;
 using ToDoApp.Contracts;
-using ToDoApp.Entities;
 using ToDoApp.Entities.DataTransferObjects.QueryStringParameters;
 using ToDoApp.Entities.Helpers;
 using ToDoApp.Entities.Models;

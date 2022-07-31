@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ToDoApp.Entities.Models;
 
-namespace ToDoApp.Entities.Configurations;
+namespace ToDo.Persistence.Configurations;
 
 public class NoteTypeConfiguration : IEntityTypeConfiguration<Note>
 {

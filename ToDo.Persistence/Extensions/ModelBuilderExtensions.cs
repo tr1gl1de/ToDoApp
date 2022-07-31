@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ToDoApp.Entities.Models;
 
-namespace ToDoApp.Entities.Extensions;
+namespace ToDo.Persistence.Extensions;
 
 public static class ModelBuilderExtensions
 {

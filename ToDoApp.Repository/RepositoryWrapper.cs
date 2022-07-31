@@ -1,5 +1,5 @@
-﻿using ToDoApp.Contracts;
-using ToDoApp.Entities;
+﻿using ToDo.Persistence;
+using ToDoApp.Contracts;
 using ToDoApp.Entities.Helpers;
 using ToDoApp.Entities.Models;
 

@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using ToDoApp.Entities.Extensions;
+using ToDo.Persistence.Extensions;
 using ToDoApp.Entities.Models;
 
-namespace ToDoApp.Entities;
+namespace ToDo.Persistence;
 
-public class RepositoryDbContext : DbContext
+public sealed class RepositoryDbContext : DbContext
 {
     public DbSet<User> Users => Set<User>();
     public DbSet<Note> Notes => Set<Note>();

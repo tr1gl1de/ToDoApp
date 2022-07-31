@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ToDo.Persistence\ToDo.Persistence.csproj" />
-      <ProjectReference Include="..\ToDoApp.Contracts\ToDoApp.Contracts.csproj" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ToDoApp.Entities\ToDoApp.Entities.csproj" />
     </ItemGroup>
 
 </Project>
