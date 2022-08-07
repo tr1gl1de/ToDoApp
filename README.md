@@ -29,3 +29,4 @@ dotnet restore
 ```shell
 dotnet run
 ```
+5. Для проверки api вы можете перейти на url https://localhost:7076/swagger
