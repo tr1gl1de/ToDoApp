@@ -23,7 +23,7 @@ public static class DependencyInjectionExtensions
         {
             var currentAssembly = Assembly.GetExecutingAssembly();
             var xmlDocs = currentAssembly.GetReferencedAssemblies()
-                .Union(new AssemblyName[] {currentAssembly.GetName()})
+                .Union(new[] {currentAssembly.GetName()})
                 .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
                 .Where(f => File.Exists(f)).ToArray();
 
@@ -51,12 +51,13 @@ public static class DependencyInjectionExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                var jwtSecret = Encoding.ASCII.GetBytes(configuration["JwtAuth:Secret"]);
+                // var jwtSecret = Encoding.ASCII.GetBytes(configuration["JwtAuth:Secret"]);
+                var symmetricSecurityKey = configuration.GetAuthSecret();
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     RequireSignedTokens = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(jwtSecret),
+                    IssuerSigningKey = symmetricSecurityKey,
 
                     ValidateAudience = false,
                     ValidateIssuer = false,

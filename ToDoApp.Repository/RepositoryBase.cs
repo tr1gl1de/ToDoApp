@@ -7,7 +7,7 @@ namespace ToDoApp.Repository;
 
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    private RepositoryDbContext RepositoryDbContext { get; set; }
+    private RepositoryDbContext RepositoryDbContext { get; }
 
     protected RepositoryBase(RepositoryDbContext repositoryDbContext)
     {

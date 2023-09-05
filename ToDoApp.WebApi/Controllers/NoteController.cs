@@ -16,8 +16,8 @@ namespace ToDoApp.WebApi.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 public class NoteController : BaseController
 {
-    private IRepositoryWrapper _repository;
-    private IMapper _mapper;
+    private readonly IRepositoryWrapper _repository;
+    private readonly IMapper _mapper;
 
     public NoteController(IRepositoryWrapper repository, IMapper mapper)
     {

@@ -6,7 +6,9 @@ using ToDoApp.Contracts;
 using ToDoApp.Entities.DataTransferObjects;
 using ToDoApp.Entities.DataTransferObjects.User;
 using ToDoApp.Entities.Models;
+using ToDoApp.WebApi.Extensions;
 using ToDoApp.WebApi.Helpers;
+using ConfigurationExtensions = ToDoApp.WebApi.Extensions.ConfigurationExtensions;
 
 namespace ToDoApp.WebApi.Controllers;
 
@@ -16,11 +18,11 @@ namespace ToDoApp.WebApi.Controllers;
 [Produces(MediaTypeNames.Application.Json)]
 public class UserController : BaseController
 {
-    private ILoggerManager _logger;
-    private IRepositoryWrapper _repository;
-    private IMapper _mapper;
-    private IConfiguration _configuration;
-    private JwtTokenHelper _tokenHelper;
+    private readonly ILoggerManager _logger;
+    private readonly IRepositoryWrapper _repository;
+    private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
+    private readonly JwtTokenHelper _tokenHelper;
 
     public UserController(
         ILoggerManager logger,
@@ -87,12 +89,12 @@ public class UserController : BaseController
             return Conflict("Incorrect password");
         }
 
-        var refreshTokenLifetime = int.Parse(_configuration["JwtAuth:RefreshTokenLifetime"]);
-        var refreshToken = new RefreshToken()
+        var refreshTokenLifetime = _configuration.GetRefreshTokenLifetime();
+        var refreshToken = new RefreshToken
         {
             Id = Guid.NewGuid(),
             UserId = user.Id,
-            ExpirationTime = DateTime.UtcNow.AddDays(refreshTokenLifetime)
+            ExpirationTime = DateTime.UtcNow.Add(refreshTokenLifetime)
         };
         _repository.RefreshToken.AddRefreshToken(refreshToken);
         await _repository.SaveAsync();

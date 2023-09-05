@@ -22,6 +22,6 @@ public static class ConfigurationExtensions
     public static TimeSpan GetRefreshTokenLifetime(this IConfiguration configuration)
     {
         var refreshTokenLifetimeInDays = int.Parse(configuration["JwtAuth:RefreshTokenLifetime"]);
-        return TimeSpan.FromMinutes(refreshTokenLifetimeInDays);
+        return TimeSpan.FromDays(refreshTokenLifetimeInDays);
     }
 }

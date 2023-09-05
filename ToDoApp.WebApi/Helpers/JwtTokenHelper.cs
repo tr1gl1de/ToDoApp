@@ -19,7 +19,7 @@ public class JwtTokenHelper
         _configuration = configuration;
     }
 
-    public IDictionary<string, string> ParseToken(string token)
+    public IDictionary<string, string>? ParseToken(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {

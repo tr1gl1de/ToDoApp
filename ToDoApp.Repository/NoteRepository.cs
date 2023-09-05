@@ -9,7 +9,7 @@ namespace ToDoApp.Repository;
 
 public class NoteRepository : RepositoryBase<Note>, INoteRepository
 {
-    private ISortHelper<Note> _helper;
+    private readonly ISortHelper<Note> _helper;
 
     public NoteRepository(ISortHelper<Note> helper,RepositoryDbContext repositoryDbContext) : base(repositoryDbContext)
     {
@@ -75,7 +75,7 @@ public class NoteRepository : RepositoryBase<Note>, INoteRepository
             notesParam.PageSize);
     }
 
-    private void SearchByName(ref IQueryable<Note> notes, string name)
+    private static void SearchByName(ref IQueryable<Note> notes, string name)
     {
         if (!notes.Any() || string.IsNullOrWhiteSpace(name))
         {

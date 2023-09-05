@@ -7,11 +7,11 @@ namespace ToDoApp.Repository;
 
 public class RepositoryWrapper : IRepositoryWrapper
 {
-    private RepositoryDbContext _repositoryDbContext;
+    private readonly RepositoryDbContext _repositoryDbContext;
     private IUserRepository _user;
     private INoteRepository _note;
     private IRefreshTokenRepository _refreshToken;
-    private ISortHelper<Note> _helper;
+    private readonly ISortHelper<Note> _helper;
 
 
     public RepositoryWrapper(

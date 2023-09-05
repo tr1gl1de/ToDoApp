@@ -47,12 +47,8 @@ public class SortHelper<T> : ISortHelper<T>
 
         var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
 
-        if (string.IsNullOrWhiteSpace(orderQuery))
-        {
-            return entities;
-        }
-
-        // use System.Dynamic.Core
-        return entities.OrderBy(orderQuery);
+        return string.IsNullOrWhiteSpace(orderQuery) ? entities :
+            // use System.Dynamic.Core
+            entities.OrderBy(orderQuery);
     }
 }

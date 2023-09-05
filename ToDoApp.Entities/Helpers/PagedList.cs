@@ -12,7 +12,7 @@ public class PagedList<T> : List<T>
     public bool HasPrevious => CurrentPage > 1;
     public bool HasNext => CurrentPage < TotalPages;
 
-    public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+    private PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
     {
         TotalCount = count;
         PageSize = pageSize;

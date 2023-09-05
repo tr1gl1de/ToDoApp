@@ -8,7 +8,7 @@ namespace ToDoApp.WebApi.Extensions;
 
 public static class ServiceExtensions
 {
-    private static readonly ILoggerManager logger = new LoggerManager();
+    private static readonly ILoggerManager Logger = new LoggerManager();
     public static void ConfigureExceptionHandler(this IApplicationBuilder app)
     {
         app.UseExceptionHandler(appError =>
@@ -20,7 +20,7 @@ public static class ServiceExtensions
                 var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                 if (contextFeature != null)
                 {
-                    logger.LogError($"Something went wrong in {contextFeature.Endpoint.DisplayName}: " +
+                    Logger.LogError($"Something went wrong in {contextFeature.Endpoint?.DisplayName}: " +
                                     $"{contextFeature.Error.Message}");
                     await context.Response.WriteAsync(new ErrorDetails
                     {

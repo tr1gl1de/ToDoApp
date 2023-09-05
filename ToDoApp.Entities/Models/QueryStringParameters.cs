@@ -2,7 +2,7 @@
 
 public abstract class QueryStringParameters
 {
-    const int maxPageSize = 50;
+    private const int MaxPageSize = 50;
     
     /// <summary>Number of page</summary>
     /// <example>1</example>
@@ -13,17 +13,11 @@ public abstract class QueryStringParameters
     /// <example>3</example>
     public int PageSize
     {
-        get
-        {
-            return _pageSize;
-        }
-        set
-        {
-            _pageSize = (value > maxPageSize) ? maxPageSize : value;
-        }
+        get => _pageSize;
+        set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
     }
     
     /// <summary>Sort field name</summary>
     /// <example>name</example>
-    public string OrderBy { get; set; }
+    public string OrderBy { get; protected init; }
 }

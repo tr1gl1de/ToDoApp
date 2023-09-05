@@ -1,16 +1,17 @@
 ﻿using System.Reflection;
 using NLog;
 using ToDoApp.WebApi.Extensions;
+using ToDoApp.WebApi.Helpers;
 
 namespace ToDoApp.WebApi;
 
 internal class Startup
 {
-    private readonly IConfiguration Configuration;
+    private readonly IConfiguration _configuration;
 
     public Startup(IConfiguration configuration)
     {
-        Configuration = configuration;
+        _configuration = configuration;
         LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/NLog.config"));
     }
 
@@ -20,7 +21,7 @@ internal class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwagger();
         services.AddDbContext();
-        services.AddJwtAuth(Configuration);
+        services.AddJwtAuth(_configuration);
         services.AddCorsPolicy();
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddServices();
@@ -39,6 +40,7 @@ internal class Startup
         app.UseCors("EnableCORS");
         app.UseAuthentication();
         app.UseAuthorization();
+        app.RequestProcessingTime();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }
