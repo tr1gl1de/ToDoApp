@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ToDoApp.Entities\ToDoApp.Entities.csproj" />
+      <ProjectReference Include="..\ToDo.Persistence\ToDo.Persistence.csproj" />
+      <ProjectReference Include="..\ToDoApp.Contracts\ToDoApp.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

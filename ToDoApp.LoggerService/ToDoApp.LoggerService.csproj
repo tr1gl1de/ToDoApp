@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ToDoApp.Entities\ToDoApp.Entities.csproj" />
+      <ProjectReference Include="..\ToDoApp.Contracts\ToDoApp.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="5.0.0" />
     </ItemGroup>
 
 </Project>
